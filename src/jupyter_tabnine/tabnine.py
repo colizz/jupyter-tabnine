@@ -4,8 +4,9 @@ import os
 import platform
 import subprocess
 import threading
-from urllib.request import urlopen
-from urllib.error import HTTPError
+from urllib import urlopen
+from urllib2 import HTTPError
+from contextlib import closing
 
 if platform.system() == "Windows":
     try:
@@ -49,7 +50,7 @@ class TabNineDownloader(threading.Thread):
                              self.download_url)
             if not os.path.isdir(output_dir):
                 os.makedirs(output_dir)
-            with urlopen(self.download_url) as res, \
+            with closing(urlopen(self.download_url)) as res, \
                 open(self.output_path, 'wb') as out:
                 out.write(res.read())
             os.chmod(self.output_path, 0o755)
@@ -76,7 +77,7 @@ def sem_complete_on(tabnine):
     }
     res = tabnine.request(json.dumps(SEM_ON_REQ_DATA))
     try:
-        tabnine.logger.info(f' {res["results"][0]["new_prefix"]}{res["results"][0]["new_suffix"]}')
+        tabnine.logger.info(' {new_prefix}{new_suffix}'.format(new_prefix=res["results"][0]["new_prefix"], new_suffix=res["results"][0]["new_suffix"]))
     except Exception:
         tabnine.logger.warning(' wrong response of turning on semantic completion')
 
@@ -130,7 +131,7 @@ class TabNine(object):
             ],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            # stderr=subprocess.DEVNULL,
         )
 
     def _get_running_tabnine(self):

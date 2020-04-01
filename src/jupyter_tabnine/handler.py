@@ -1,5 +1,5 @@
 from tornado import web
-from urllib.parse import unquote
+from urllib import unquote
 from notebook.base.handlers import IPythonHandler
 
 class TabNineHandler(IPythonHandler):
@@ -7,7 +7,7 @@ class TabNineHandler(IPythonHandler):
         self.tabnine = tabnine
 
     @web.authenticated
-    async def get(self):
+    def get(self):
         url_params = self.request.uri
         request_data = unquote(url_params[url_params.index('=')+1:])
         response = self.tabnine.request(request_data)
