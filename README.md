@@ -1,3 +1,14 @@
+### Notes on `jupyter-tabnine` installion to py2 version of Jupyter
+```
+# install python2 jupyter-tabnine
+python setup.py install --user --record files_py2.log
+python -c "import jupyter_tabnine; print jupyter_tabnine.__file__;" # for test
+jupyter nbextension install --py jupyter_tabnine --user
+jupyter nbextension enable jupyter_tabnine --user --py
+jupyter serverextension enable jupyter_tabnine --user --py
+```
+----------------------
+
 # TabNine for Jupyter Notebook
 
 **This plugin has been tested on MacOS, Linux and Windows, it support all these systems. For browsers it supports Chrome and Safari but not IE**
